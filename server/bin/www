@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+var mongoose = require('mongoose');
 /**
  * Module dependencies.
  */

@@ -1,18 +1,26 @@
 {
   "name": "students-bot",
   "version": "0.0.0",
+  "jest": {
+    "testEnvironment": "node"
+  },
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "jest"
   },
   "dependencies": {
     "body-parser": "~1.16.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.0",
     "express": "~4.14.1",
+    "mongoose": "^4.11.9",
     "morgan": "~1.7.0",
     "node-telegram-bot-api": "^0.28.0",
     "pug": "~2.0.0-beta10",
     "serve-favicon": "~2.3.2"
+  },
+  "devDependencies": {
+    "jest": "^20.0.4"
   }
 }

@@ -20,9 +20,8 @@ const bot = new TelegramBot(botToken, {polling: true});
 
 // Listen for any kind of message. There are different kinds of
 // messages.
-bot.on('message', (msg) => {
+bot.on('message', msg => {
   const chatId = msg.chat.id;
 // send a message to the chat acknowledging receipt of their message
 bot.sendMessage(chatId, `${msg.from.first_name} is gay but he said: ${msg.text}`);
-
 });
