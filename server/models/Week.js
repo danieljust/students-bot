@@ -5,13 +5,13 @@ const weekSchema = mongoose.Schema({
 });
 
 weekSchema.methods.getOrder = function () {
-  const order = this.number % 2 == 0;
-  return order ? ('even') : ('odd');
+  const order = (this.number & 1);
+  return order ? ('odd') : ('even');
 };
 
 weekSchema.methods.getNumber = function () {
     return this.number;
-}
+};
 
 const Week = mongoose.model('Week', weekSchema);
 

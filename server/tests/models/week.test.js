@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
 const Week = require('../../models/Week');
 
-
 beforeAll(() => {
     return mongoose
         .connect('mongodb://localhost/test');
+});
+
+beforeEach(() => {
+    return Week.remove({});
 });
 
 afterEach(() => {
@@ -21,6 +24,16 @@ describe('week model tests', () => {
                 expect(weeks[0].getOrder()).toBe('odd');
             });
     });
+
+    it('should return even value', () => {
+        const evenWeek = new Week({number: 2});
+        return evenWeek
+            .save()
+            .then(week => Week.find({_id: week._id}))
+            .then(weeks => {
+                expect(weeks[0].getOrder()).toBe('even');
+            });
+    })
 
     it('should return number of a week', () => {
         const firstWeek = new Week({number: 10});
