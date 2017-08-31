@@ -7,7 +7,10 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "jest"
+    "test": "jest",
+    "precommit": "npm run lint",
+    "prepush": "npm test",
+    "lint": "./node_modules/.bin/eslint **/*.js --ignore-pattern node_modules/"
   },
   "dependencies": {
     "body-parser": "~1.16.0",
@@ -21,6 +24,10 @@
     "serve-favicon": "~2.3.2"
   },
   "devDependencies": {
+    "eslint": "^4.5.0",
+    "eslint-config-airbnb-base": "^11.3.2",
+    "eslint-plugin-import": "^2.7.0",
+    "husky": "^0.14.3",
     "jest": "^20.0.4"
   }
 }
