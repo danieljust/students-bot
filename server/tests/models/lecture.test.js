@@ -9,15 +9,25 @@ beforeEach(() => Lecture.remove({}));
 afterEach(() => Lecture.remove({}));
 
 describe('Lecture model tests', () => {
-  it('should return Lecture time', () => {
-    const thirdLecture = new Lecture({ time: '11:30' });
+  it('should return lecture time', () => {
+    const thirdLecture = new Lecture({time: '11:30'});
     return thirdLecture
       .save()
-      .then(lecture => Lecture.find({ _id: lecture._id }))
-      .then((Lectures) => {
-        expect(Lectures[0].getTime()).toBe('11:30');
+      .then(lecture => Lecture.find({_id: lecture._id}))
+      .then(lectures => {
+        expect(lectures[0].time).toBe('11:30');
       });
   });
+ it('should return lecture index 3', () => {
+    const thirdLecture = new Lecture({time: '11:30'});
+    return thirdLecture
+      .save()
+      .then(lecture => Lecture.find({_id: lecture._id}))
+      .then(lectures => {
+        expect(lectures[0].index).toBe(3);
+      });
+  });
+
 });
 
 afterAll(() => mongoose.connection.close());

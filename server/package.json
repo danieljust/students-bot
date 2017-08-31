@@ -2,7 +2,7 @@
   "name": "students-bot",
   "version": "0.0.0",
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "jsdom"
   },
   "private": true,
   "scripts": {
@@ -10,13 +10,15 @@
     "test": "jest",
     "precommit": "npm run lint",
     "prepush": "npm test",
-    "lint": "./node_modules/.bin/eslint **/*.js --ignore-pattern node_modules/"
+    "lint": "./node_modules/.bin/eslint **/*.js --ignore-pattern node_modules/ --fix"
   },
   "dependencies": {
     "body-parser": "~1.16.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.0",
     "express": "~4.14.1",
+    "lodash.cond": "^4.5.2",
+    "lodash.stubtrue": "^4.13.0",
     "mongoose": "^4.11.9",
     "morgan": "~1.7.0",
     "node-telegram-bot-api": "^0.28.0",

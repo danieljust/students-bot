@@ -1,18 +1,13 @@
 const mongoose = require('mongoose');
 
 const weekSchema = mongoose.Schema({
-  number: Number
+  number: Number,
 });
 
-weekSchema.methods.getOrder = function () {
-  const order = (this.number & 1);
-  return order ? ('odd') : ('even');
-};
-
-weekSchema.methods.getNumber = function () {
-    return this.number;
-};
-
+weekSchema.virtual('order').get(function () {
+  // eslint-disable-next-line no-bitwise
+  return (this.number & 1) ? 'odd' : 'even';
+});
 const Week = mongoose.model('Week', weekSchema);
 
 module.exports = Week;
