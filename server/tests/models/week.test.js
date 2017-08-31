@@ -21,19 +21,19 @@ describe('week model tests', () => {
             .save()
             .then(week => Week.find({_id: week._id}))
             .then(weeks => {
-                expect(weeks[0].getOrder()).toBe('odd');
+                expect(weeks[0].order).toBe('odd');
             });
     });
 
-    it('should return even value', () => {
-        const evenWeek = new Week({number: 2});
-        return evenWeek
-            .save()
-            .then(week => Week.find({_id: week._id}))
-            .then(weeks => {
-                expect(weeks[0].getOrder()).toBe('even');
-            });
-    })
+  it('should return even value', () => {
+    const evenWeek = new Week({number: 2});
+    return evenWeek
+      .save()
+      .then(week => Week.find({_id: week._id}))
+      .then(weeks => {
+        expect(weeks[0].order).toBe('even');
+      });
+  });
 
     it('should return number of a week', () => {
         const firstWeek = new Week({number: 10});
@@ -41,7 +41,7 @@ describe('week model tests', () => {
             .save()
             .then(week => Week.find({_id: week._id}))
             .then(weeks => {
-                expect(weeks[0].getNumber()).toBe(10);
+                expect(weeks[0].number).toBe(10);
             });
     });
 });

@@ -24,7 +24,7 @@ describe('Lecture model tests', () => {
       .save()
       .then(lecture => Lecture.find({_id: lecture._id}))
       .then(lectures => {
-        expect(lectures[0].index).toBe(3);
+        expect(lectures[0].kek).toBe(3);
       });
   });
 
