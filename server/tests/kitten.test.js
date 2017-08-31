@@ -1,15 +1,12 @@
+/* eslint-disable no-undef */
 const mongoose = require('mongoose');
 const Kitten = require('../models/Kitten');
 
 
-beforeAll(() => {
-  return mongoose
-    .connect('mongodb://localhost/mydb');
-});
+beforeAll(() => mongoose
+  .connect('mongodb://localhost/mydb'));
 
-afterEach(() => {
-  return Kitten.remove({});
-});
+afterEach(() => Kitten.remove({}));
 
 describe('kitten tests', () => {
   it('should add kitten with name snowball', () => {
@@ -17,11 +14,13 @@ describe('kitten tests', () => {
     return snowball
       .save()
       .then(kitten => Kitten.find({_id: kitten._id}))
-      .then(kittens => {
+      .then((kittens) => {
         expect(kittens[0].name).toBe('snowball');
       });
   });
+  it('should check that kitten meowing his name', () => {
+    const snowball = new Kitten({name: 'snowball'});
+    expect(snowball.speak()).toBe('Meow name is snowball');
+  });
 });
-afterAll(() => {
-  return mongoose.connection.close();
-});
+afterAll(() => mongoose.connection.close());
