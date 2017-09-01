@@ -13,21 +13,20 @@ describe('Lecture model tests', () => {
     const thirdLecture = new Lecture({time: '11:30'});
     return thirdLecture
       .save()
-      .then(lecture => Lecture.find({_id: lecture._id}))
+      .then(lecture => Lecture.findOne({_id: lecture._id}))
       .then(lectures => {
-        expect(lectures[0].time).toBe('11:30');
+        expect(lectures.time).toBe('11:30');
       });
   });
- it('should return lecture index 3', () => {
+  it('should return lecture index 3', () => {
     const thirdLecture = new Lecture({time: '11:30'});
     return thirdLecture
       .save()
-      .then(lecture => Lecture.find({_id: lecture._id}))
-      .then(lectures => {
-        expect(lectures[0].kek).toBe(3);
+      .then(lecture => Lecture.findOne({_id: lecture._id}))
+      .then(lecture => {
+        expect(lecture.index).toBe(3);
       });
   });
-
 });
 
 afterAll(() => mongoose.connection.close());
