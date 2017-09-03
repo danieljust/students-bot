@@ -1,51 +1,39 @@
 const mongoose = require('mongoose');
 const Week = require('../../models/Week');
+const weekService = require('../../dao/mongo/weekService');
 
-beforeAll(() => {
-    return mongoose
-        .connect('mongodb://localhost/test');
-});
+beforeAll(() => mongoose.connect('mongodb://localhost/test', {
+  useMongoClient: true
+}));
 
-beforeEach(() => {
-    return Week.remove({});
-});
+beforeEach(() => Week.remove({}));
 
-afterEach(() => {
-    return Week.remove({});
-});
+afterEach(() => Week.remove({}));
+
+afterAll(() => mongoose.connection.close());
 
 describe('week model tests', () => {
-    it('should return odd value', () => {
-        const oddWeek = new Week({number: 1});
-        return oddWeek
-            .save()
-            .then(week => Week.find({_id: week._id}))
-            .then(weeks => {
-                expect(weeks[0].order).toBe('odd');
-            });
-    });
-
-  it('should return even value', () => {
-    const evenWeek = new Week({number: 2});
-    return evenWeek
-      .save()
-      .then(week => Week.find({_id: week._id}))
-      .then(weeks => {
-        expect(weeks[0].order).toBe('even');
+  it('should return odd value', () => {
+    return weekService.create({number: 1})
+      .then(week => weekService.findOneById(week._id))
+      .then(week => {
+        expect(week.order).toBe('odd');
       });
   });
 
-    it('should return number of a week', () => {
-        const firstWeek = new Week({number: 10});
-        return firstWeek
-            .save()
-            .then(week => Week.find({_id: week._id}))
-            .then(weeks => {
-                expect(weeks[0].number).toBe(10);
-            });
-    });
-});
+  it('should return even value', () => {
+    weekService.create({number: 2})
+      .then(week => weekService.findOneById(week._id))
+      .then(week => {
+        expect(week.order).toBe('even');
+      });
+  });
 
-afterAll(() => {
-    return mongoose.connection.close();
+  it('should return number of a week', () => {
+    weekService.create({number: 10})
+      .then(week => weekService.findOneById(week._id))
+      .then(week => {
+        expect(week.number).toBe(10);
+      });
+  });
 });

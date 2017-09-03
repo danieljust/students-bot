@@ -2,7 +2,7 @@
   "name": "students-bot",
   "version": "0.0.0",
   "jest": {
-    "testEnvironment": "jsdom"
+    "testEnvironment": "node"
   },
   "private": true,
   "scripts": {
