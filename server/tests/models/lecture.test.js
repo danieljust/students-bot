@@ -61,6 +61,39 @@ describe('Lecture tests relations with other models', () => {
         expect(lecture.discipline.name).toBe(discipline.name);
       });
   });
+  it('should return all lectures of the discipline', () => {
+    const myDiscipline = new Discipline({
+      teacher: 'Шилер',
+      name: 'Системы информационно-аналитического мониторинга',
+    });
+    const myPromises = [
+      myDiscipline.save(),
+      lectureService.create({ time: '8:00', day: 1 }),
+      lectureService.create({ time: '9:45', day: 3 }),
+      lectureService.create({ time: '11:30', day: 3 }),
+    ];
+    return Promise.all(myPromises)
+      .then(([discipline, first, second, third]) => {
+        first.discipline = discipline._id;
+        second.discipline = discipline._id;
+        third.discipline = discipline._id;
+        discipline.lectures.push(first);
+        discipline.lectures.push(second);
+        discipline.lectures.push(third);
+        return Promise.all([discipline.save(), first.save(), second.save(), third.save()]);
+      })
+      .then(([discipline, first, second, third]) =>
+        Promise.all([
+          discipline,
+          Lecture
+            .find({ id: first.discipline._id })
+            .populate('discipline')
+            .exec()]),
+      )
+      .then(([discipline, first, second, third]) => {
+        expect(discipline.lectures).toBe('kek');
+      });
+  });
   it('should return 2 for week number', () =>
     Promise.all([
       weekService.create({ number: 2 }),
