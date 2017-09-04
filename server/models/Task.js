@@ -2,13 +2,12 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const weekSchema = Schema({
-  _id: Schema.Types.ObjectId,
-  name: String,
-  order: String,
-  classes: [{ type: Schema.Types.ObjectId, ref: 'Class' }],
+const taskSchema = Schema({
+  deadline: Date,
+  description: String,
+  discipline: [{type: Schema.Types.ObjectId, ref: 'Discipline'}],
 });
 
-const Week = mongoose.model('Week', weekSchema);
+const Task = mongoose.model('Task', taskSchema);
 
-module.exports = Week;
+module.exports = Task;
