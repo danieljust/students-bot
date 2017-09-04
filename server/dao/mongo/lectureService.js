@@ -3,7 +3,7 @@ const Lecture = require('../../models/Lecture');
 module.exports = {
   create: info => Lecture({
     time: info.time,
-    day: info.day
+    day: info.day,
   })
     .save(),
   addWeek: (lecture, week) => {
@@ -11,5 +11,5 @@ module.exports = {
     return lecture.save();
   },
   save: lecture => lecture.save(),
-  findOneById: id => Lecture.findOne({_id: id})
+  findOneById: id => Lecture.findOne({ _id: id }),
 };
