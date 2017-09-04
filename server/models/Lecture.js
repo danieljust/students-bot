@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 const lectureSchema = mongoose.Schema({
   time: String,
   day: Number,
+  week: { type: Schema.Types.ObjectId, ref: 'Week' },
   discipline: { type: Schema.Types.ObjectId, ref: 'Discipline' },
 });
 
