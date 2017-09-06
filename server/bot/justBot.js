@@ -1,9 +1,7 @@
 const TelegramBot = require('node-telegram-bot-api');
-const { botToken } = require('../cfg');
-// replace the value below with the Telegram token you receive from @BotFather
+const {botToken} = require('../cfg');
 
-// Create a bot that uses 'polling' to fetch new updates
-const bot = new TelegramBot(botToken, { polling: true });
+const bot = new TelegramBot(botToken, {polling: true});
 
 // Matches "/echo [whatever]"
 bot.onText(/\/task (.+)/, (msg, match) => {
@@ -12,15 +10,37 @@ bot.onText(/\/task (.+)/, (msg, match) => {
   // of the message
   const chatId = msg.chat.id;
   const resp = match[1]; // the captured "whatever"
-
-  // send back the matched "whatever" to the chat
   bot.sendMessage(chatId, resp);
 });
-
-// Listen for any kind of message. There are different kinds of
-// messages.
 bot.on('message', (msg) => {
   const chatId = msg.chat.id;
   // send a message to the chat acknowledging receipt of their message
   bot.sendMessage(chatId, `${msg.from.first_name} is gay but he said: ${msg.text}`);
 });
+
+const showshowWeekOrDayButtons = (msg, myBot) => {
+  myBot.sendMessage(msg.chat.id, 'Как вы хотите посмотреть расписание?', {
+    reply_markup: JSON.stringify({
+      keyboard: [['По дням'], ['По неделям']],
+      force_reply: true,
+      one_time_keyboard: true
+    })
+  }).then(sentMessage => {
+    myBot.onReplyToMessage(sentMessage.chat.id, sentMessage.message_id, reply => {
+      if (reply.text === 'По дням') {
+        myBot.sendMessage(msg.chat.id, 'Окей щас по дням раскидаем');
+      } else {
+        myBot.sendMessage(msg.chat.id, 'Недели так недели');
+      }
+    });
+    // bot.once('message', (msg) => {
+    //   if (msg.text === 'По дням') {
+    //     bot.sendMessage(msg.chat.id, 'Окей щас по дням раскидаем')
+    //   } else {
+    //     bot.sendMessage(msg.chat.id, 'Недели так недели')
+    //   }
+    // });
+  });
+};
+
+bot.onText(/\/show_schedule/, msg => showshowWeekOrDayButtons(msg, bot));
