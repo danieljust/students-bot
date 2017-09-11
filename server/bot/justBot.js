@@ -1,5 +1,6 @@
 const TelegramBot = require('node-telegram-bot-api');
 const {botToken} = require('../cfg');
+const taskController = require('../controllers/taskController');
 
 const bot = new TelegramBot(botToken, {polling: true});
 
@@ -12,11 +13,26 @@ bot.onText(/\/task (.+)/, (msg, match) => {
   const resp = match[1]; // the captured "whatever"
   bot.sendMessage(chatId, resp);
 });
-bot.on('message', (msg) => {
-  const chatId = msg.chat.id;
-  // send a message to the chat acknowledging receipt of their message
-  bot.sendMessage(chatId, `${msg.from.first_name} is gay but he said: ${msg.text}`);
+
+bot.onText(/\/show_task (.+)/, (msg, match) => {
+  const id = match[1];
+  const task = taskController.show(id);
+  bot.sendMessage(msg.chat.id, task);
 });
+
+bot.onText(/\/create_task (\d\d-\d\d-\d\d\d\d) (.+)/, (msg, match) => taskController.create({
+  dline: match[1],
+  desc: match[2]
+})
+  .then(task => bot.sendMessage(msg.chat.id, 'saved'))
+  .catch(task => bot.sendMessage(msg.chat.id, 'Something\'s wrong')
+  ));
+
+// bot.on('message', (msg) => {
+//   const chatId = msg.chat.id;
+//   // send a message to the chat acknowledging receipt of their message
+//   bot.sendMessage(chatId, `${msg.from.first_name} is gay but he said: ${msg.text}`);
+// });
 
 const showshowWeekOrDayButtons = (msg, myBot) => {
   myBot.sendMessage(msg.chat.id, 'Как вы хотите посмотреть расписание?', {
