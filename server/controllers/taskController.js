@@ -3,8 +3,9 @@ const moment = require('moment');
 
 module.exports = {
   show: (id) => taskService.findOneById(id),
-  create: ({dline, desc}) => taskService.create({
-    deadline: moment(dline, 'MM-DD-YYYY'),
-    description: desc
-  })
+  create: ({deadline, desc}) =>
+    taskService.create({
+      deadline: moment(deadline, 'DD-MM-YYYY'),
+      description: desc
+    })
 };
