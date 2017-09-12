@@ -6,7 +6,7 @@
   },
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "nodemon ./bot/justBot.js",
     "test": "jest",
     "precommit": "npm run lint",
     "prepush": "npm test",
@@ -27,7 +27,8 @@
     "morgan": "~1.7.0",
     "node-telegram-bot-api": "^0.28.0",
     "pug": "~2.0.0-beta10",
-    "serve-favicon": "~2.3.2"
+    "serve-favicon": "~2.3.2",
+    "telebot": "^1.2.3"
   },
   "devDependencies": {
     "eslint": "^4.5.0",

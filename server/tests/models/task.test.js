@@ -16,14 +16,14 @@ afterAll(() => mongoose.connection.close());
 
 describe('task model tests', () => {
   it('should return compare deadlines', () => taskService.create({
-    deadline: moment('12-25-1995', 'MM-DD-YYYY'),
+    deadline: moment('25-12-1995', 'DD-MM-YYYY'),
     description: 'Awesome_description' })
     .then(task => taskService.findOneById(task._id))
     .then((task) => {
-      expect(moment('12-25-1995', 'MM-DD-YYYY').isSame(task.deadline)).toBeTruthy();
+      expect(moment('25-12-1995', 'DD-MM-YYYY').isSame(task.deadline)).toBeTruthy();
     }));
   it('should return same description', () => taskService.create({
-    deadline: moment('12-25-1995', 'MM-DD-YYYY'),
+    deadline: moment('25-12-1995', 'DD-MM-YYYY'),
     description: 'Awesome_description' })
     .then(task => taskService.findOneById(task._id))
     .then((task) => {
