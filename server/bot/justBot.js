@@ -1,12 +1,10 @@
-const mongoose = require('mongoose');
 const TelegramBot = require('node-telegram-bot-api');
 const {botToken} = require('../cfg');
 const taskController = require('../controllers/taskController');
+const models = require('../models2');
 
 const bot = new TelegramBot(botToken, {polling: true});
-mongoose.connect('mongodb://localhost/test', {
-  useMongoClient: true,
-})
+models.sequelize.sync()
   .then(() => {
     // Matches "/echo [whatever]"
     bot.onText(/\/task (.+)/, (msg, match) => {

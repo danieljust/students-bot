@@ -32,7 +32,7 @@ describe('Lecture model tests', () => {
 });
 
 
-describe('Lecture tests relations with other models', () => {
+describe('Lecture tests relations with other modelsMongo', () => {
   it('should return Системы информационно-аналитического мониторинга', () => P.props({
     discipline: disciplineService.create({
       teacher: 'Шилер',
