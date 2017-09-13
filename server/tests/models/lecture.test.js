@@ -18,13 +18,13 @@ afterEach(() => Lecture.remove({}));
 afterAll(() => mongoose.connection.close());
 
 describe('Lecture model tests', () => {
-  it('should return lecture time', () => lectureService.create({ time: '11:30' })
+  it('should return lecture time', () => lectureService.create({time: '11:30'})
     .then(lecture => lectureService.findOneById(lecture._id))
-    .then((lecture) => {
+    .then(lecture => {
       expect(lecture.time).toBe('11:30');
     }));
 
-  it('should return lecture index 3', () => lectureService.create({ time: '11:30' })
+  it('should return lecture index 3', () => lectureService.create({time: '11:30'})
     .then(lecture => lectureService.findOneById(lecture._id))
     .then((lecture) => {
       expect(lecture.index).toBe(3);
@@ -38,12 +38,12 @@ describe('Lecture tests relations with other models', () => {
       teacher: 'Шилер',
       name: 'Системы информационно-аналитического мониторинга',
     }),
-    lecture: lectureService.create({ time: '08:00', day: 1 }),
+    lecture: lectureService.create({time: '08:00', day: 1}),
   })
-    .then(({ discipline, lecture }) =>
+    .then(({discipline, lecture}) =>
       disciplineService.addLecture(discipline, lecture),
     )
-    .then(({ lecture }) =>
+    .then(({lecture}) =>
       lectureService
         .findOneById(lecture._id)
         .populate('discipline')
@@ -59,9 +59,9 @@ describe('Lecture tests relations with other models', () => {
     });
     const myPromises = [
       myDiscipline.save(),
-      lectureService.create({ time: '8:00', day: 1 }),
-      lectureService.create({ time: '9:45', day: 3 }),
-      lectureService.create({ time: '11:30', day: 3 }),
+      lectureService.create({time: '8:00', day: 1}),
+      lectureService.create({time: '9:45', day: 3}),
+      lectureService.create({time: '11:30', day: 3}),
     ];
     return Promise.all(myPromises)
       .then(([discipline, first, second, third]) => {
@@ -77,7 +77,7 @@ describe('Lecture tests relations with other models', () => {
         Promise.all([
           discipline,
           Lecture
-            .find({ _id: first.discipline._id })
+            .find({_id: first.discipline._id})
             .populate('discipline')
             .exec()]),
       )
@@ -92,9 +92,9 @@ describe('Lecture tests relations with other models', () => {
     });
     const myPromises = [
       myDiscipline.save(),
-      lectureService.create({ time: '8:00', day: 1 }),
-      lectureService.create({ time: '9:45', day: 3 }),
-      lectureService.create({ time: '11:30', day: 3 }),
+      lectureService.create({time: '8:00', day: 1}),
+      lectureService.create({time: '9:45', day: 3}),
+      lectureService.create({time: '11:30', day: 3}),
     ];
     return Promise.all(myPromises)
       .then(([discipline, ...lectures]) => {
@@ -121,10 +121,10 @@ describe('Lecture tests relations with other models', () => {
   });
   it('should return 2 for week number', () =>
     Promise.all([
-      weekService.create({ number: 2 }),
-      lectureService.create({ time: '08:00', day: 1 }),
+      weekService.create({number: 2}),
+      lectureService.create({time: '08:00', day: 1}),
     ])
-      .then(([week, lecture]) => lectureService.addWeek(lecture, week))
+      .then(([week, lecture]) => lectureService.addWeek({lecture, week}))
       .then(lecture =>
         lectureService
           .findOneById(lecture._id)
