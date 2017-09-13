@@ -5,7 +5,7 @@ module.exports = {
     time: info.time,
     day: info.day
   })
-    .save().then(result => result),
+    .save(),
   addWeek: ({lecture, week}) => {
     lecture.week = week._id;
     return lecture.save();
