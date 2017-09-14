@@ -1,0 +1,38 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "example",
+    "database": "bot",
+    "host": "localhost",
+    "dialect": "postgres",
+    "pool": {
+      "max": 5,
+      "min": 1,
+      "idle": 10000
+    }
+  },
+  "test": {
+    "username": "postgres",
+    "password": "example",
+    "database": "bot_test",
+    "host": "localhost",
+    "dialect": "postgres",
+    "pool": {
+      "max": 5,
+      "min": 1,
+      "idle": 10000
+    }
+  },
+  "production": {
+    "username": "postgres",
+    "password": "example",
+    "database": "proddb",
+    "host": "localhost",
+    "dialect": "postgres",
+    "pool": {
+      "max": 5,
+      "min": 1,
+      "idle": 10000
+    }
+  }
+}
