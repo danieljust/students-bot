@@ -1,7 +1,6 @@
 const TelegramBot = require('node-telegram-bot-api');
 const {botToken} = require('../cfg');
-const taskController = require('../controllers/taskController');
-const models = require('../models2');
+const models = require('../models');
 
 const bot = new TelegramBot(botToken, {polling: true});
 models.sequelize.sync()
@@ -16,20 +15,20 @@ models.sequelize.sync()
       bot.sendMessage(chatId, resp);
     });
 
-    bot.onText(/\/show_task (.+)/, (msg, match) => {
-      const id = match[1];
-      const task = taskController.show(id);
-      bot.sendMessage(msg.chat.id, task);
-    });
+    // bot.onText(/\/show_task (.+)/, (msg, match) => {
+    //   const id = match[1];
+    //   const task = taskController.show(id);
+    //   bot.sendMessage(msg.chat.id, task);
+    // });
 
-    bot.onText(/\/create_task (\d\d-\d\d-\d\d\d\d) (.+)/, (msg, match) =>
-      // const words = msg.text.split(' ');
-      // maybe different ways
-      taskController.create({
-        deadline: match[1],
-        desc: match[2]
-      })
-    );
+    // bot.onText(/\/create_task (\d\d-\d\d-\d\d\d\d) (.+)/, (msg, match) =>
+    //   // const words = msg.text.split(' ');
+    //   // maybe different ways
+    //   taskController.create({
+    //     deadline: match[1],
+    //     desc: match[2]
+    //   })
+    // );
     // bot.on('message', (msg) => {
     //   const chatId = msg.chat.id;
     //   // send a message to the chat acknowledging receipt of their message

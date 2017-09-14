@@ -1,4 +1,4 @@
-const models = require('../../models2');
+const models = require('../../models');
 const lectureService = require('../../dao/postgres/lectureService');
 const P = require('bluebird');
 

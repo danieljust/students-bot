@@ -1,77 +1,84 @@
 const lectureController = require('../../controllers/lectureController');
-const Lecture = require('../../models/Lecture');
-const mongoose = require('mongoose');
 const P = require('bluebird');
-const Discipline = require('../../models/Discipline');
-const Week = require('../../models/Week');
+const models = require('../../models');
 
-beforeAll(() => mongoose.connect('mongodb://localhost/test', {
-  useMongoClient: true,
-}));
+beforeAll(() => models.sequelize.sync());
 
-beforeEach(() => Lecture.remove({}));
+afterAll(() => models.sequelize.close());
 
-afterEach(() => Lecture.remove({}));
-
-afterAll(() => mongoose.connection.close());
-
-describe('lectureController tests', () => {
-  it('should create lecture properly using controller method', () =>
-    lectureController.create({time: '08:00', day: 1})
-      .then(lecture => {
-        expect.assertions(2);
-        expect(lecture.time).toBe('08:00');
-        expect(lecture.day).toBe(1);
-      }));
-  it('should show recently created lecture', () => {
-    lectureController.create({time: '08:00', day: 1})
+describe('basic CRUD tests', () => {
+  beforeEach(() => lectureController.deleteAll());
+  it('should create and view lecture', () => {
+    lectureController.create({time: '08:00', day: 2})
       .then(lecture => lectureController.show(lecture.id))
-      .then(lecture => expect(lecture.day).toBe(1))
-  });
-  it('should update lecture info', () => {
-    lectureController.create({time: '08:00', day: 1})
       .then(lecture => {
-        const newInfo = {
-          day: 23,
-          time: '09:45'
-        };
-        return lectureController.update(lecture.id, newInfo);
-      })
-      .then(lectureId => lectureController.show(lectureId))
-      .then(lecture => expect(lecture.day).toBe(23))
+        expect(lecture.day).toBe(2);
+        expect(lecture.time).toBe('08:00');
+      });
   });
-  it('should delete lecture according to id', () =>
-    lectureController.create({time: '08:00', day: 1})
-      .then(lecture => P.props({
-        deleted: lectureController.deleteOneById(lecture.id),
-        id: lecture.id
+  it('should update lecture info', () =>
+    lectureController.create({time: '08:00', day: 2})
+      .then(lecture => lectureController.update({
+        lecture,
+        info: {
+          time: '09:00',
+          day: 3
+        }
       }))
+      .then(lecture => {
+        const i = 0;
+        expect(lecture.day).toBe(3);
+        expect(lecture.time).toBe('09:00');
+      })
+  );
+  it('should delete lecture by id', () =>
+    lectureController.create({time: '08:00', day: 2})
+      .then(lecture =>
+        P.props({
+          deleted: lectureController.deleteOneById(lecture.id),
+          id: lecture.id
+        }))
       .then(result => lectureController.show(result.id))
-      .then(result => expect(result).toBeNull()));
-  it('should add discipline to lecture', () =>
-    Discipline({teacher: 'Schiller', name: 'BIAS'}).save()
-      .then(discipline =>
-        P.props({
-          discipline,
-          lecture: lectureController.create({time: '08:00', day: 1})
-        })
-      )
-      .then(result => lectureController.addDiscipline({lecture: result.lecture, discipline: result.discipline}))
-      .then(lecture => Discipline.findOne({_id: lecture.discipline}))
-      .then(discipline => expect(discipline.teacher).toBe('Schiller')));
-  it('should add week to lecture', () => {
-    Week({number: 2}).save()
-      .then(week =>
-        P.props({
-          week,
-          lecture: lectureController.create({time: '08:00', day: 1})
-        }))
+      .then(result => expect(result).toBeNull())
+  );
+  it('should delete all lectures', () =>
+    P.all([
+      lectureController.create({time: '08:00', day: 2}),
+      lectureController.create({time: '08:00', day: 1})
+    ])
+      .then(() => lectureController.deleteAll())
+      .then(() => lectureController.showAll())
+      .then(result => expect(result.length).toBe(0))
+  );
+  it('should add week to lecture', () =>
+    P.props({
+      week: models.week.build({number: 1}).save(),
+      lecture: lectureController.create({time: '08:00', day: 1})
+    })
       .then(result =>
-        lectureController.addWeek({
-          lecture: result.lecture,
-          week: result.week
+        P.props({
+          lecture: lectureController.addWeek({lecture: result.lecture, week: result.week}),
+          weekId: result.week.id
         }))
-      .then(lecture => Week.findOne({_id: lecture.week}))
-      .then(week => expect(week.number).toBe(2))
-  })
+      .then(result => {
+        expect(result.lecture.weekId).toBe(result.weekId)
+      })
+      .catch(err => console.log(err)));
+  it('should add discipline to lecture', () =>
+    P.props({
+      discipline: models.discipline.build({teacher: 'Schiller', name: 'BIAS'}).save(),
+      lecture: lectureController.create({time: '08:00', day: 1})
+    })
+      .then(result =>
+        P.props({
+          lecture: lectureController.addDiscipline({lecture: result.lecture, discipline: result.discipline}),
+          disciplineId: result.discipline.id
+        }))
+      .then(result => {
+        expect(result.lecture.disciplineId).toBe(result.disciplineId)
+      })
+      .catch(err => console.log(err)));
 });
+
+
+
