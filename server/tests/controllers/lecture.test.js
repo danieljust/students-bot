@@ -1,4 +1,5 @@
 const lectureController = require('../../controllers/lectureController');
+const disciplineController = require('../../controllers/disciplineController');
 const P = require('bluebird');
 const models = require('../../models');
 
@@ -8,6 +9,7 @@ afterAll(() => models.sequelize.close());
 
 describe('basic CRUD tests', () => {
   beforeEach(() => lectureController.deleteAll());
+  beforeEach(() => disciplineController.deleteAll());
   it('should create and view lecture', () => {
     lectureController.create({time: '08:00', day: 2})
       .then(lecture => lectureController.show(lecture.id))
@@ -66,7 +68,7 @@ describe('basic CRUD tests', () => {
       .catch(err => console.log(err)));
   it('should add discipline to lecture', () =>
     P.props({
-      discipline: models.discipline.build({teacher: 'Schiller', name: 'BIAS'}).save(),
+      discipline: disciplineController.create({teacher: 'Schiller', name: 'BIAS'}),
       lecture: lectureController.create({time: '08:00', day: 1})
     })
       .then(result =>
@@ -75,10 +77,7 @@ describe('basic CRUD tests', () => {
           disciplineId: result.discipline.id
         }))
       .then(result => {
-        expect(result.lecture.disciplineId).toBe(result.disciplineId)
+        expect(result.lecture.disciplineId).toBe(result.disciplineId);
       })
       .catch(err => console.log(err)));
 });
-
-
-
